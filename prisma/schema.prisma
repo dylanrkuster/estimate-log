@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+	provider = "prisma-client"
+	output   = "./generated"
+}
+
+datasource db {
+	provider = "postgresql"
+}
+
+model Estimate {
+	@@map("estimates")
+
+	id   Int      @id @default(autoincrement())
+	date DateTime @default(now())
+	name String
+
+	projectedMinutes   Int @map("projected_minutes")
+	projectedReasoning String? @map("projected_reasoning") // why should this take this long?
+
+	actualMinutes   Int? @map("actual_minutes")
+	actualReasoning String? @map("actual_reasoning") // if significantly different than projected, what went wrong?
+}
