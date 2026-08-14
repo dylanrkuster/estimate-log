@@ -7,7 +7,7 @@ export default function Header() {
         <Link href="/" className="font-bold text-3xl">
           Estimate Log
         </Link>
-        <div className="space-x4 text-xl">
+        <div className="text-xl">
           <Link href="/">Events</Link>
           <Link href="/stats">Stats</Link>
         </div>
