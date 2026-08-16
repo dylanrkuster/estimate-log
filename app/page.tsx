@@ -9,10 +9,5 @@ export default async function EventsPage() {
     <div key={estimate.id}>{estimate.name}</div>
   ));
 
-  return (
-    <div className="pt-48 flex justify-center items-center">
-      <h1 className="text-black text-6xl">Estimates</h1>
-      {renderedEstimates}
-    </div>
-  );
+  return <div>{renderedEstimates}</div>;
 }
