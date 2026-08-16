@@ -24,7 +24,7 @@ export default function CreateEstimatePage() {
         date,
         name,
         projectedMinutes,
-        projectedReasoning,
+        projectedReasoning: projectedReasoning ? projectedReasoning : null,
       },
     });
 
