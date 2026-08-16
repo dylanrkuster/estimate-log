@@ -13,12 +13,16 @@ export default async function ViewAnEstimatePage(
   // asynchronously grab the id from the url params
   const { id } = await props.params;
 
-  // fake delay to test the loading page
-  await new Promise((r) => setTimeout(r, 500));
+  // lets make sure the id is a number
+  const sanitizedId = parseInt(id);
+
+  if (!sanitizedId) {
+    return notFound(); // in the future, we'll return an error page here instead
+  }
 
   // fetch an estimate from our db
-  const estimate = await db.estimate.findFirst({
-    where: { id: parseInt(id) },
+  const estimate = await db.estimate.findUnique({
+    where: { id: sanitizedId },
   });
 
   // if we can't find one, redirect the user to our custom not found page
