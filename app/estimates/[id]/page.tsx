@@ -14,9 +14,9 @@ export default async function ViewAnEstimatePage(
     const { id } = await props.params;
 
     // lets make sure the id is a number
-    const sanitizedId = parseInt(id);
+    const sanitizedId = Number(id);
 
-    if (!sanitizedId) {
+    if (!sanitizedId || sanitizedId <= 0) {
         return notFound(); // in the future, we'll return an error page here instead
     }
 
