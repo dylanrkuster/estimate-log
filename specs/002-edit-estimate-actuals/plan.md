@@ -24,11 +24,11 @@ Dylan reads this section only. If this is wrong, the plan is wrong.
 
 **Milestones**:
 
-| #   | Milestone                    | Pass if                                                                                                                                                           |
-| --- | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Edit page shows the estimate | Name, date, projection visible and not editable; actuals editable; Save visible; reasoning shows characters remaining; junk id is not-found                       |
-| 2   | Valid save of actuals        | Save with minutes in range (reasoning optional, within cap) lands on home with those actuals; projection unchanged; later valid number updates                    |
-| 3   | Visible refusals             | Tamper of locked fields, invalid/missing/over-max minutes, over-max reasoning, and clear-once-set each show an error and leave stored values as the rules require |
+| #   | Milestone                    | Pass if                                                                                                                                                              |
+| --- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Edit page shows the estimate | Name, date, projection visible and not editable; actuals editable; Save visible; reasoning shows characters remaining; junk id is not-found                          |
+| 2   | Valid save of actuals        | Save with minutes in range (reasoning optional, within cap) lands on home with those actuals in date-then-id order; projection unchanged; later valid number updates |
+| 3   | Visible refusals             | Tamper of locked fields, invalid/missing/over-max minutes, over-max reasoning, and clear-once-set each show an error and leave stored values as the rules require    |
 
 **Not doing**:
 

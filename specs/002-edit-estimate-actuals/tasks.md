@@ -16,11 +16,11 @@ description: 'Task list for edit estimate actuals'
 
 `/speckit-implement` does **one** unsigned row, then stops for sign-off.
 
-| Plan milestone                  | Pass if                                                                                                                                          | Tasks     |
-| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
-| 1. Edit page shows the estimate | Name, date, projection visible and not editable; actuals editable; Save visible; reasoning shows characters remaining; junk id is not-found      | T001–T004 |
-| 2. Valid save of actuals        | Save with minutes in range (reasoning optional, within cap) lands on home with those actuals; projection unchanged; later valid number updates   | T005–T006 |
-| 3. Visible refusals             | Tamper, invalid/missing/over-max minutes, over-max reasoning, and clear-once-set each show an error and leave stored values as the rules require | T007–T010 |
+| Plan milestone                  | Pass if                                                                                                                                                              | Tasks     |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| 1. Edit page shows the estimate | Name, date, projection visible and not editable; actuals editable; Save visible; reasoning shows characters remaining; junk id is not-found                          | T001–T004 |
+| 2. Valid save of actuals        | Save with minutes in range (reasoning optional, within cap) lands on home with those actuals in date-then-id order; projection unchanged; later valid number updates | T005–T006 |
+| 3. Visible refusals             | Tamper, invalid/missing/over-max minutes, over-max reasoning, and clear-once-set each show an error and leave stored values as the rules require                     | T007–T010 |
 
 ## Format: `[ID] [P?] [Story] Description`
 

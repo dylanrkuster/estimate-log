@@ -17,7 +17,7 @@ npm run dev
 ## Checks (pass/fail)
 
 1. **Open**: Home list Edit opens `/estimates/{id}` (same link as today). Page shows name, date, projected minutes, projected reasoning (not editable) and actual minutes + actual reasoning (editable). Save is visible. No on-page back control.
-2. **First close**: Enter actual minutes, omit reasoning, save. Land on home. That row’s actual minutes match; reasoning empty; projection unchanged.
+2. **First close**: Enter actual minutes, omit reasoning, save. Land on home. That row’s actual minutes match; reasoning empty; projection unchanged. The row is not at a new place in the list (order is work date, then id).
 3. **Close with reasoning**: Enter both actuals, save. Home shows both. Projection unchanged.
 4. **Update actuals**: Open a row that already has actuals. Change actual minutes to another valid number (including 0). Save. Home shows the new number. Projection unchanged.
 5. **Refuse clear**: On a row with actual minutes, save with actual minutes blank. Stay with a visible error. Stored actual minutes unchanged.

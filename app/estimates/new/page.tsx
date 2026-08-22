@@ -99,7 +99,7 @@ export default function CreateEstimatePage() {
                 </div>
             </div>
             <button
-                className="w-fit rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
+                className="w-fit cursor-pointer rounded-md bg-zinc-900 px-4 py-2 text-sm font-medium text-white"
                 type="submit"
             >
                 Create

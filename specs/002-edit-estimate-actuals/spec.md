@@ -19,7 +19,7 @@ Dylan reads this section only. If this is wrong, the spec is wrong.
 - Edit from the home-list control still opens the existing estimate page
 - That page shows name, date, projected minutes, and projected reasoning as uneditable context
 - Actual minutes (required) and actual reasoning (optional) are the only editable fields
-- A valid save stores those actuals and returns the operator to the home list, which shows them
+- A valid save stores those actuals and returns the operator to the home list, which shows them in a stable order (work date, then id) so the row does not jump
 - A later visit can change the actuals to a new number or reasoning; it cannot clear them or change the projection
 
 **Out**:
@@ -49,7 +49,7 @@ Dylan reads this section only. If this is wrong, the spec is wrong.
 **Done when**:
 
 - Edit shows the estimate’s name, date, and projection, and they cannot be changed on that page
-- Saving actual minutes (reasoning optional) returns the operator to the home list showing those values
+- Saving actual minutes (reasoning optional) returns the operator to the home list showing those values in the same stable order as before the save
 - A tampered submit that sends a new projection does not change the stored projection, and that refusal is visible
 - A missing estimate id does not save anything
 - Once actual minutes exist, a save that would blank them is refused and the stored actual stays
@@ -60,6 +60,7 @@ Dylan reads this section only. If this is wrong, the spec is wrong.
 
 - Q: After actual minutes have been saved once, can the operator change those actuals later, or is the first save the last? → A: Actuals can be changed on a later visit. Projection stays locked. An actual cannot be cleared once specified.
 - Q: After a valid save of actuals, should the operator land on the home list, or stay on that estimate’s page? → A: After a valid save, go to the home list.
+- Q: After save, the edited row appeared at the bottom of the list. → A: Keep a stable home-list order (work date, then id) so a row does not jump after edit (Dylan, 2026-08-22).
 
 ## User Scenarios & Testing _(mandatory)_
 
@@ -122,7 +123,7 @@ The operator, or anything posting as the operator, cannot change name, date, pro
 - **FR-004**: Actual minutes MUST be editable and required to save. Actual reasoning MUST be editable and optional.
 - **FR-005**: A valid save MUST persist actual minutes and actual reasoning (empty reasoning allowed) and MUST NOT persist any change to name, date, projected minutes, or projected reasoning.
 - **FR-005a**: Once actual minutes are stored, a save that would clear them (blank, missing, or non-numeric in a way that would wipe the value) MUST be refused. The stored actual minutes MUST stay. Changing them to another valid number is allowed.
-- **FR-006**: After a valid save the operator MUST land on the home list and see those actuals there.
+- **FR-006**: After a valid save the operator MUST land on the home list and see those actuals there. The list MUST use a stable order (work date, then id) so saving actuals does not move that row to a new place in the list.
 - **FR-007**: Read-only display MUST NOT be treated as the lock. The save step MUST refuse changes to name, date, projected minutes, and projected reasoning even if posted.
 - **FR-008**: A refused save (tamper of locked fields, missing/invalid actual minutes, or a save that would clear existing actuals) MUST be visible to the operator. A silent stay with no message is a failure of this requirement.
 - **FR-009**: After create, stored projected minutes and projected reasoning MUST NOT change through this edit path.
@@ -143,6 +144,7 @@ The operator, or anything posting as the operator, cannot change name, date, pro
 - **SC-004**: 100% of saves with missing or non-numeric actual minutes store no new bogus actual and show a visible refusal. If actual minutes were already stored, 100% of those attempts leave the stored number unchanged.
 - **SC-006**: After actual minutes exist, 100% of later saves with a different valid number update that number; 0% of later saves blank it out.
 - **SC-005**: 100% of unknown ids result in not-found and zero writes.
+- **SC-007**: After a valid save, the edited row keeps its place in the home list relative to other rows when ordered by work date, then id.
 
 ## Assumptions
 
@@ -150,6 +152,7 @@ The operator, or anything posting as the operator, cannot change name, date, pro
 - Actual minutes may be updated to another valid number after they were first saved. They MUST NOT be cleared. Projection still cannot change. (Dylan, 2026-08-22.)
 - Actual minutes of zero is valid. Negative or non-numeric is not.
 - After a valid save, the operator lands on the home list (Dylan, 2026-08-22).
+- Home list order is work date, then id, so an edit does not send the row to the bottom (Dylan, 2026-08-22).
 - No new back control on the estimate page (browser back).
 - Constitution VI is the floor: lock is in the save step. This spec also locks projection from create, not only after actuals exist, and also locks name and date on this page.
 - Visual treatment should match the current app well enough to use; this spec is the edit behavior, not a restyle of home or create.
@@ -179,3 +182,4 @@ Defaults below stand unless Dylan overrules before `/speckit-predict`.
 | H   | On-page back control                                            | Reject (browser back)                                        |
 | I   | Concurrent two writers                                          | Not applicable                                               |
 | J   | Visible refusal on lock/invalid actual                          | Accept — constitution VI; this feature is the lock           |
+| K   | Stable home-list order after save                               | **Accept** — date, then id (Dylan, 2026-08-22)               |

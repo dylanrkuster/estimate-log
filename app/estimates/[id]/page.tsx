@@ -1,5 +1,6 @@
 import { db } from '@/db';
 import { notFound } from 'next/navigation';
+import EstimateActualsForm from './actuals-form';
 
 interface ViewAnEstimagePageProps {
     params: Promise<{
@@ -30,6 +31,19 @@ export default async function ViewAnEstimatePage(
         return notFound();
     }
 
-    // display the fetched estimate's name
-    return <div>{estimate.name}</div>;
+    return (
+        <EstimateActualsForm
+            id={estimate.id}
+            actualMinutes={
+                estimate.actualMinutes == null
+                    ? ''
+                    : String(estimate.actualMinutes)
+            }
+            actualReasoning={estimate.actualReasoning ?? ''}
+            date={estimate.date.toISOString().slice(0, 10)}
+            name={estimate.name}
+            projectedMinutes={estimate.projectedMinutes}
+            projectedReasoning={estimate.projectedReasoning ?? ''}
+        />
+    );
 }
