@@ -1,6 +1,7 @@
 import { db } from '@/db';
 import { notFound } from 'next/navigation';
 import EstimateActualsForm from './actuals-form';
+import { calendarDate } from './limits';
 
 interface ViewAnEstimagePageProps {
     params: Promise<{
@@ -40,7 +41,7 @@ export default async function ViewAnEstimatePage(
                     : String(estimate.actualMinutes)
             }
             actualReasoning={estimate.actualReasoning ?? ''}
-            date={estimate.date.toISOString().slice(0, 10)}
+            date={calendarDate(estimate.date)}
             name={estimate.name}
             projectedMinutes={estimate.projectedMinutes}
             projectedReasoning={estimate.projectedReasoning ?? ''}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { saveEstimateActuals } from './actions';
 import { REASONING_MAX } from './limits';
 
@@ -30,16 +30,24 @@ export default function EstimateActualsForm({
 }: EstimateActualsFormProps) {
     const [reasoning, setReasoning] = useState(actualReasoning);
     const remaining = REASONING_MAX - reasoning.length;
+    const [state, formAction] = useActionState(saveEstimateActuals, {
+        error: null,
+    });
 
     return (
-        <form
-            action={saveEstimateActuals}
-            className="flex max-w-xl flex-col gap-6"
-        >
+        <form action={formAction} className="flex max-w-xl flex-col gap-6">
             <input name="id" type="hidden" value={id} />
             <h1 className="text-2xl font-semibold tracking-tight">
                 Edit Estimate
             </h1>
+            {state.error ? (
+                <p
+                    className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800"
+                    role="alert"
+                >
+                    {state.error}
+                </p>
+            ) : null}
             <div className="flex flex-col gap-4">
                 <div className="flex flex-col gap-1">
                     <label

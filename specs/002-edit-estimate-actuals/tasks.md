@@ -84,10 +84,10 @@ description: 'Task list for edit estimate actuals'
 
 ### Milestone 3 — visible refusals (stop for sign-off after T010)
 
-- [ ] T007 [US2] In `saveEstimateActuals` (`app/estimates/[id]/`), if posted name, date, projected minutes, or projected reasoning is present and differs from stored (date as calendar date), return an error and write nothing
-- [ ] T008 [US2] In `saveEstimateActuals`, return an error and write nothing for: missing/non-numeric/negative/non-integer actual minutes; actual minutes > 10080; reasoning length > 2000; a post that would clear already-stored actual minutes
-- [ ] T009 [US2] In `app/estimates/[id]/actuals-form.tsx`, re-render a visible error from the action return; do not silent-`return` on failure
-- [ ] T010 [US2] Confirm `createEstimate` in `app/estimates/new/page.tsx` is unchanged; run the checks in `specs/002-edit-estimate-actuals/quickstart.md`
+- [x] T007 [US2] In `saveEstimateActuals` (`app/estimates/[id]/`), if posted name, date, projected minutes, or projected reasoning is present and differs from stored (date as calendar date), return an error and write nothing
+- [x] T008 [US2] In `saveEstimateActuals`, return an error and write nothing for: missing/non-numeric/negative/non-integer actual minutes; actual minutes > 10080; reasoning length > 2000; a post that would clear already-stored actual minutes
+- [x] T009 [US2] In `app/estimates/[id]/actuals-form.tsx`, re-render a visible error from the action return; do not silent-`return` on failure
+- [x] T010 [US2] Confirm `createEstimate` in `app/estimates/new/page.tsx` is unchanged; run the checks in `specs/002-edit-estimate-actuals/quickstart.md`
 
 **Sign-off (milestone 3)**: Tamper, invalid/over-max, and clear-once-set each show an error and leave stored values as required.
 
