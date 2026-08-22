@@ -1,10 +1,9 @@
 <!--
 Sync Impact Report
-- Version change: 3.0.0 → 3.1.0 (MINOR)
-- Modified principles:
-  - IV. Milestones, Then Audit for Drift: added explicit human sign-off
-    as the gate between milestones. Agent MUST implement one unsigned
-    milestone per turn and stop. "I think it passed" is not sign-off.
+- Version change: 3.1.0 → 3.2.0 (MINOR)
+- Modified principles: none renamed
+- Added principles:
+  - X. Maintain the Codebase, Don't Just Fill the Spec
 - Added sections: none
 - Removed sections: none
 - Follow-up TODOs: none
@@ -286,6 +285,35 @@ Rationale: Habits practiced here are the habits that ship to a client.
 Check: plan (branch + spec + verification named); diff (no secrets; migration
 SQL reviewed; no DROP+ADD against a populated database).
 
+### X. Maintain the Codebase, Don't Just Fill the Spec
+
+This repo is maintained in conversation: the agent writes, Dylan steers.
+Filling the spec is not enough. The diff MUST look like someone who will
+still own these files next month.
+
+- Before a plan names a new module, function, or constant, the agent MUST
+  scan the files this change will touch and their siblings in the same
+  route (or folder). The plan MUST say what existing piece is extended,
+  or that the scan found none.
+- The same value or the same rule in two places MUST live in one shared
+  module. A file with no `'use client'` and no `'use server'` is how
+  client and server share. The agent MUST NOT copy a literal or a check
+  into both a Client Component and a Server Action.
+- Prefer extending an existing function over adding a near-copy. A second
+  function that is the first plus a small tweak MUST be a change to the
+  first, unless Dylan accepts a written split.
+- The agent MUST NOT extract a helper with a single caller "for later"
+  (Principle VIII). Share when there are two call sites or two runtimes.
+- The agent MUST NOT put a shared constant or helper inside a
+  `'use server'` or `'use client'` file.
+
+Rationale: The next session cannot see the copy you left. DRY is how an
+AI-native repo stays small enough to steer.
+
+Check: plan (reuse named, or "scan found none"); implement (no duplicated
+caps/checks across client and server; no twin methods); audit extras
+include unjustified copies.
+
 ## Settled Stack
 
 Do not relitigate. A plan or spec that proposes replacing any of the following
@@ -309,7 +337,7 @@ This constitution governs the estimate-log repository only.
   import those folders' conventions, structure, or stack as requirements here.
 - Work that is not gated (typo, comment, formatting-only) MAY skip the
   ceremony of Principles II–IV. It remains subject to Principles VI, VIII,
-  IX, Settled Stack, and this Scope section.
+  IX, X, Settled Stack, and this Scope section.
 - If it is unclear whether a change is gated, treat it as gated.
 
 ## Governance
@@ -337,6 +365,9 @@ At implement time the agent MUST confirm:
 - previous milestones are signed or a named skip exists in
   `milestone-log.md` (IV)
 - stop after that milestone and wait for sign-off (IV)
+- no duplicated literal or twin method across the files this milestone
+  touched; shared client/server values live in a file with no boundary
+  directive (X)
 
 At plan time the agent MUST confirm:
 
@@ -346,11 +377,13 @@ At plan time the agent MUST confirm:
 - `plan-diff.md` is Finalized with (a)(b)(c)(d) per delta, and who we
   go with on (b)(c)(d), not a blanket "looks good" (III)
 - no stack, schema, or scope violation (VIII, Settled Stack, Scope)
+- reuse named, or a scan of the touched route found none (X)
 
 At audit time the agent MUST confirm:
 
 - spec vs diff, question 1 (IV)
-- extras vs spec, question 2, named list or none (IV)
+- extras vs spec, question 2, named list or none (IV), including
+  unjustified copies or twin methods (X)
 - close-lock and observable validation if actions changed (VI)
 - secrets absent; migration SQL safe (IX)
 - after a test runner exists: at least one spec-derived regression test (VII)
@@ -363,4 +396,4 @@ templates, agent habit, or "best practice":
 - TDD-before-implementation: no application code before a failing test,
   including while this repo has no test runner.
 
-**Version**: 3.1.0 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-22
+**Version**: 3.2.0 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-22

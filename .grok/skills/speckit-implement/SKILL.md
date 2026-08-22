@@ -164,6 +164,11 @@ You **MUST** consider the user input before proceeding (if not empty).
       a test runner exists.
     - On a broken milestone: surface it, work the cause with Dylan, do not
       silent-fix, do not proceed.
+    - **Principle X**: Before writing, scan the files this milestone touches
+      and siblings in the same folder. Extend an existing function instead
+      of adding a near-copy. If the same value or check is needed on client
+      and server, put it in a module with no `'use client'`/`'use server'`.
+      Do not extract a one-caller helper "for later."
 
 8. After that milestone's tasks:
     - Mark those tasks `[X]` in tasks.md.

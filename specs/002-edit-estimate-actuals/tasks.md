@@ -69,8 +69,8 @@ description: 'Task list for edit estimate actuals'
 
 ### Milestone 2 — valid save (stop for sign-off after T006)
 
-- [ ] T005 [US1] Add `saveEstimateActuals` next to `app/estimates/[id]/` (`'use server'`): parse actual minutes as integer 0–10080; optional reasoning ≤2000; `update` only `actualMinutes` and `actualReasoning`; `redirect('/')` on success
-- [ ] T006 [US1] Wire the form in `app/estimates/[id]/actuals-form.tsx` to `saveEstimateActuals`; do not write name, date, projected minutes, or projected reasoning in the Prisma `update`
+- [x] T005 [US1] Add `saveEstimateActuals` next to `app/estimates/[id]/` (`'use server'`): parse actual minutes as integer 0–10080; optional reasoning ≤2000; `update` only `actualMinutes` and `actualReasoning`; `redirect('/')` on success
+- [x] T006 [US1] Wire the form in `app/estimates/[id]/actuals-form.tsx` to `saveEstimateActuals`; do not write name, date, projected minutes, or projected reasoning in the Prisma `update`
 
 **Sign-off (milestone 2)**: Valid save lands on home with actuals; projection unchanged; a later valid number updates.
 

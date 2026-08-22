@@ -60,6 +60,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied). Confirm `prediction.md` exists (step 1b) but do **not** read its body. The agent's plan MUST be independent of the sketch; `/speckit-plan-diff` is where they meet.
 
+2b. **Principle X**: Before naming new modules, functions, or constants, scan the files this feature will touch and their siblings in the same route. In `research.md` or the plan Approach, name what existing piece is extended, or that the scan found none. Do not plan a near-copy of an existing function. Do not plan the same literal in both a Client Component and a Server Action — one shared module with no `'use client'`/`'use server'`.
+
 3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
     - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
     - Fill Constitution Check section from constitution

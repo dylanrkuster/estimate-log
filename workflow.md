@@ -48,6 +48,13 @@ After a finalized diff: `plan.agent.md` is the agent's original; `plan.md` is wh
 - "Do all of it" without naming skipped sign-offs is a violation.
 - The agent's "it passed" is not sign-off.
 
+## Maintain (Principle X)
+
+Plan and implement scan the route you are changing. Share a value or check
+once (a file with no `use client` / `use server` can be imported by both).
+Extend an existing function instead of adding a twin. Do not extract a
+helper that has one caller.
+
 ## Diff verdicts
 
 Each row, not a blanket "looks good". Grain: class names and above.

@@ -48,8 +48,9 @@ Do not use the old (a) right / (b) left off / (c) wrong mapping.
     His sketch is a moderate-to-high-level raw plan, not a `plan.md`.
     Do not treat omitted plan-template sections, `research.md`, or
     Tailwind class lists as misses.
-    Do treat extra tables, routes, services, client-side enforcement, or
-    skipped server-side rules as deltas.
+    Do treat extra tables, routes, services, client-side enforcement,
+    skipped server-side rules, or a new near-copy of an existing function
+    (constitution X) as deltas.
 
 6. Write `FEATURE_DIR/plan-diff.md` as **Status: Awaiting rulings** with:
 
