@@ -4,7 +4,9 @@ import { db } from '@/db';
 import Link from 'next/link';
 
 export default async function EventsPage() {
-    const estimates = await db.estimate.findMany();
+    const estimates = await db.estimate.findMany({
+        orderBy: [{ date: 'asc' }, { id: 'asc' }],
+    });
 
     const renderedEstimates = estimates.map((estimate, i) => (
         <tr
