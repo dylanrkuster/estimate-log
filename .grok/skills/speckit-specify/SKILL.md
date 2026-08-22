@@ -138,7 +138,7 @@ Given that feature description, do this:
     7. Identify Key Entities (if data involved)
     8. Return: SUCCESS (spec ready for planning)
 
-7. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
+7. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings. Generate the rest of the spec the same way as before. Then **refresh `## Human review`** using `.specify/templates/human-review-rules.md` (spec.md shape). It is derived from the rest of this file. Do not invent. Keep it the first `##`.
 
 8. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
 
@@ -192,8 +192,9 @@ Given that feature description, do this:
     - **If items fail (excluding [NEEDS CLARIFICATION])**:
         1. List the failing items and specific issues
         2. Update the spec to address each issue
-        3. Re-run validation until all items pass (max 3 iterations)
-        4. If still failing after 3 iterations, document remaining issues in checklist notes and warn user
+        3. Refresh `## Human review` after that update
+        4. Re-run validation until all items pass (max 3 iterations)
+        5. If still failing after 3 iterations, document remaining issues in checklist notes and warn user
 
     - **If [NEEDS CLARIFICATION] markers remain**:
         1. Extract all [NEEDS CLARIFICATION: ...] markers from the spec
@@ -228,7 +229,8 @@ Given that feature description, do this:
         6. Present all questions together before waiting for responses
         7. Wait for user to respond with their choices for all questions (e.g., "Q1: A, Q2: Custom - [details], Q3: B")
         8. Update the spec by replacing each [NEEDS CLARIFICATION] marker with the user's selected or provided answer
-        9. Re-run validation after all clarifications are resolved
+        9. Refresh `## Human review` after those updates
+        10. Re-run validation after all clarifications are resolved
 
     d. **Update Checklist**: After each validation iteration, update the checklist file with current pass/fail status
 
@@ -275,6 +277,7 @@ Report completion to the user with:
 - `SPECIFY_FEATURE_DIRECTORY` — the feature directory path
 - `SPEC_FILE` — the spec file path
 - Checklist results summary
+- Tell Dylan to read `## Human review` only, then agree or correct it. If he corrects it, patch the rest of the spec to match, then refresh Human review.
 - Readiness for the next phase (`/speckit-clarify` optional, then `/speckit-predict`, then `/speckit-plan`)
 
 **NOTE:** Branch creation is handled by the `before_specify` hook (git extension). Spec directory and file creation are always handled by this core command.

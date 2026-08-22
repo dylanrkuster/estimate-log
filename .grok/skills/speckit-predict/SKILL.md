@@ -10,6 +10,11 @@ before `/speckit-plan` runs.
 
 This command records. It does not plan, critique, complete, or improve.
 
+Dylan writes a moderate-to-high-level raw plan of what should happen to
+implement the agreed spec. That is the whole command. Uncertainties are
+optional; blank means none. He is not writing `plan.md`. Grain: no lower
+than class names. Section headings live in `.specify/templates/prediction.md`.
+
 ## Steps
 
 1. From the estimate-log repo root, run
@@ -31,27 +36,33 @@ This command records. It does not plan, critique, complete, or improve.
 
 4. If `FEATURE_DIR/prediction.md` does not exist, copy
    `.specify/templates/prediction.md` to `FEATURE_DIR/prediction.md`.
+   If it exists with older headings (`## Pieces`, `## Where each runs`,
+   `## What each can reach`, `## Data flow`, `## Enforcement`), rewrite it
+   to the current template shape and move his existing words into
+   `## Sketch`. Do not add topics he did not write.
 
 5. Take the sketch from `$ARGUMENTS` and/or Dylan's following message.
-   Write it into the matching sections of `prediction.md`.
+   Write it into `## Sketch` (and `## Uncertainties` only if he named any).
     - Preserve his wording.
     - Do not add pieces, layers, files, or rules he did not name.
-    - Do not rename his pieces to "better" names.
+    - Do not rename his words to "better" names.
+    - Do not require where it runs, what it can reach, data flow, or
+      enforcement. Do not ask for those.
     - Fill **Feature** and **Date** if those are still blank.
-    - Leave any section he did not address as `_(unfilled)_`.
+    - If he did not write uncertainties, leave `## Uncertainties` as
+      `_(unfilled)_` and treat that as None.
 
-6. If any required section is still `_(unfilled)_` (Pieces, Where each runs,
-   What each can reach, Data flow, Enforcement; Uncertainties may stay
-   `_(unfilled)_` only if he explicitly has none — then write `None`):
-    - Show the unfilled section headings.
-    - Ask him to fill those only.
-    - Do not offer a draft.
-
-7. When every required section has his words, save `prediction.md`.
-   Report the path. Next command is `/speckit-plan`, not `/speckit-tasks`.
+6. If `## Sketch` is still `_(unfilled)_`:
+    - Ask him for the raw plan.
+    - Do not offer a draft. Do not list required topics.
+      Otherwise save `prediction.md`.
+      Report the path. Next command is `/speckit-plan`, not `/speckit-tasks`.
+      What he got right, wrong, or left off is `/speckit-plan-diff`.
 
 ## Stop if
 
 - He asks whether the sketch is good, complete, or "what I missed":
   say that is `/speckit-plan-diff` after the agent plan. Record, don't grade.
 - He asks you to generate the prediction for him: refuse. Principle I.
+- He asks for a per-piece breakdown or a `plan.md`-shaped sketch: refuse.
+  Record the raw plan.

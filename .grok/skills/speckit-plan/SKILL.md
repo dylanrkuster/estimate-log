@@ -56,7 +56,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. **Setup**: Run `.specify/scripts/bash/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
-1b. **Principle III gate**: `SPECS_DIR/prediction.md` MUST exist and MUST NOT contain `_(unfilled)_` in Pieces, Where each runs, What each can reach, Data flow, or Enforcement. If missing or unfilled, STOP. Do not fill `plan.md`. Tell the user to run `/speckit-predict` first. Do not draft the prediction for them.
+1b. **Principle III gate**: `SPECS_DIR/prediction.md` MUST exist. `## Sketch` MUST NOT be `_(unfilled)_`. `## Uncertainties` may be `_(unfilled)_` or empty (treat as None). If the file or Sketch is missing, STOP. Do not fill `plan.md`. Tell the user to run `/speckit-predict` first. Do not draft the prediction for them. Do not refuse because the sketch omits runs/reach/flow/enforcement. The sketch is a raw high-level plan; this command writes `plan.md` for implementation.
 
 2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied). Confirm `prediction.md` exists (step 1b) but do **not** read its body. The agent's plan MUST be independent of the sketch; `/speckit-plan-diff` is where they meet.
 
@@ -67,6 +67,7 @@ You **MUST** consider the user input before proceeding (if not empty).
     - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
     - Phase 1: Generate data-model.md, contracts/, quickstart.md
     - Re-evaluate Constitution Check post-design
+    - Refresh `## Human review` last, using `.specify/templates/human-review-rules.md` (plan.md shape), derived from `plan.md` plus `research.md` / `data-model.md` if present. Keep it the first `##`. Do not invent pieces or rules that are not in those files.
 
 ## Mandatory Post-Execution Hooks
 
@@ -106,7 +107,7 @@ Check if `.specify/extensions.yml` exists in the project root.
 
 ## Completion Report
 
-Command ends after Phase 1 design. Report branch, IMPL_PLAN path, and generated artifacts. Next command is `/speckit-plan-diff`, not `/speckit-tasks`. Do not treat this `plan.md` as executable until plan-diff is Status: Finalized.
+Command ends after Phase 1 design. Report branch, IMPL_PLAN path, and generated artifacts. Tell Dylan to read `## Human review` only. Next command is `/speckit-plan-diff`, not `/speckit-tasks`. Do not treat this `plan.md` as executable until plan-diff is Status: Finalized. **Milestones** in Human review are implement sign-off gates (constitution IV): one per `/speckit-implement` turn.
 
 ## Phases
 

@@ -181,7 +181,7 @@ Execution steps:
 6. Integration after EACH accepted answer (incremental update approach):
     - Maintain in-memory representation of the spec (loaded once at start) plus the raw file contents.
     - For the first integrated answer in this session:
-        - Ensure a `## Clarifications` section exists (create it just after the highest-level contextual/overview section per the spec template if missing).
+        - Ensure a `## Clarifications` section exists (create it immediately after `## Human review` if that section exists, otherwise just after the title/metadata block). Never place Clarifications above Human review.
         - Under it, create (if not present) a `### Session YYYY-MM-DD` subheading for today.
     - Append a bullet line immediately after acceptance: `- Q: <question> → A: <final answer>`.
     - Then immediately apply the clarification to the most appropriate section(s):
@@ -193,7 +193,8 @@ Execution steps:
         - Terminology conflict → Normalize term across spec; retain original only if necessary by adding `(formerly referred to as "X")` once.
     - If the clarification invalidates an earlier ambiguous statement, replace that statement instead of duplicating; leave no obsolete contradictory text.
     - Save the spec file AFTER each integration to minimize risk of context loss (atomic overwrite).
-    - Preserve formatting: do not reorder unrelated sections; keep heading hierarchy intact.
+    - Then refresh `## Human review` using `.specify/templates/human-review-rules.md` (spec.md shape) so it matches the updated spec.
+    - Preserve formatting: do not reorder unrelated sections; keep heading hierarchy intact. `## Human review` stays the first `##`.
     - Keep each inserted clarification minimal and testable (avoid narrative drift).
 
 7. Validation (performed after EACH write plus final pass):
@@ -201,7 +202,7 @@ Execution steps:
     - Total asked (accepted) questions ≤ 5.
     - Updated sections contain no lingering vague placeholders the new answer was meant to resolve.
     - No contradictory earlier statement remains (scan for now-invalid alternative choices removed).
-    - Markdown structure valid; only allowed new headings: `## Clarifications`, `### Session YYYY-MM-DD`.
+    - Markdown structure valid; only allowed new headings: `## Human review` (must already exist or be created as the first `##`), `## Clarifications`, `### Session YYYY-MM-DD`.
     - Terminology consistency: same canonical term used across all updated sections.
 
 8. Write the updated spec back to `FEATURE_SPEC`.

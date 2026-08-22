@@ -8,6 +8,12 @@
 
 **Input**: User description: "$ARGUMENTS"
 
+## Human review
+
+<!-- Filled last from the rest of this file. See .specify/templates/human-review-rules.md. Dylan reads this section only. -->
+
+_(unfilled)_
+
 ## User Scenarios & Testing _(mandatory)_
 
 <!--

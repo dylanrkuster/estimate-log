@@ -1,10 +1,10 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.0.1 (PATCH)
-- Modified principles: none renamed or redefined
-  - III. Human Sketch Before Agent Plan: wording only — names the
-    repo commands and artifacts that ratify the existing sequence
-    (spec → human sketch → agent plan → diff)
+- Version change: 3.0.0 → 3.1.0 (MINOR)
+- Modified principles:
+  - IV. Milestones, Then Audit for Drift: added explicit human sign-off
+    as the gate between milestones. Agent MUST implement one unsigned
+    milestone per turn and stop. "I think it passed" is not sign-off.
 - Added sections: none
 - Removed sections: none
 - Follow-up TODOs: none
@@ -78,16 +78,28 @@ Check: spec (required cases present; each enumerated branch ruled); plan
 
 ### III. Human Sketch Before Agent Plan
 
-After the spec is agreed, the human writes the architecture in prose. Only then
-does the agent reveal its plan. The two are diffed out loud.
+After the spec is agreed, the human writes a moderate-to-high-level raw
+plan of what should happen to implement it. Only then does the agent
+reveal its plan. The two are diffed out loud.
 
-- The human's sketch MUST name the pieces, where each runs (build / request /
-  server / client), what each can reach, and how data flows.
+- The human's sketch MUST be that raw plan. Grain: no lower than class
+  names. It MUST NOT be a `plan.md` and MUST NOT be graded against the
+  agent's implementation-plan template.
+- The sketch MUST NOT be a required form of where work runs, what it can
+  reach, data flow, or enforcement. Uncertainties are optional; blank
+  means none.
 - The agent MUST NOT generate or implement a plan before that sketch exists.
 - The agent MUST NOT present its plan first "to save time."
-- The agent MUST diff the two plans out loud. The only legal outcomes are:
-  (a) he had it; (b) he missed a piece, which MUST be named; (c) the agent's
-  plan is worse — he overrules.
+- The agent MUST NOT ask the human to produce `plan.md`. The agent writes
+  `plan.md` for implementation.
+- The agent MUST diff the two plans out loud at class-name grain and
+  above. The only legal classifications per delta are:
+  (a) agree — same approach on that topic;
+  (b) disagree — both named the topic, different approach;
+  (c) human-only — he had it, the agent did not;
+  (d) agent-only — the agent had it, he did not.
+  (b), (c), and (d) require an action: who we go with, and why.
+  He MUST name that action. The agent MUST NOT pick it for him.
 - A diff with only one possible verdict (rubber-stamp "looks good") MUST NOT
   be treated as complete.
 - Ceremony MUST scale to the task: a one-line copy change is not a five-step
@@ -98,39 +110,54 @@ For gated work in this repo, that sequence is ratified by these commands
 and artifacts (paths under `specs/<feature>/`):
 
 - After `spec.md` is agreed, `/speckit-predict` writes `prediction.md`.
-  The agent records the human's sketch. It MUST NOT draft, complete, or
-  improve it.
+  The agent records the raw plan. It MUST NOT draft, complete, improve,
+  split into per-piece answers, or demand runs/reach/flow/enforcement.
 - Then `/speckit-plan`. It MUST refuse if `prediction.md` is missing or
-  still has `_(unfilled)_` required sections. It MUST NOT read the
-  prediction body.
-- Then `/speckit-plan-diff`. The diff MUST be of architecture, not file
-  lists. Each delta MUST receive one of the three legal verdicts above,
-  including "agent plan is worse." A blanket "looks good" is not a ruling.
-  On finalize: `plan.agent.md` is the original agent plan; `plan.md` is
-  the resolved plan; `plan-diff.md` Status is Finalized.
+  `## Sketch` is `_(unfilled)_`. Blank uncertainties mean none. It MUST
+  NOT read the prediction body.
+- Then `/speckit-plan-diff`. The diff MUST be architecture at class-name
+  grain and above, not file lists and not below class names. Each delta
+  MUST receive one of (a)(b)(c)(d). (b)(c)(d) MUST include who we go
+  with and why. A blanket "looks good" is not a ruling. On finalize:
+  `plan.agent.md` is the original agent plan; `plan.md` is the resolved
+  plan; `plan-diff.md` Status is Finalized.
 - `/speckit-tasks` and `/speckit-implement` MUST refuse unless
   `plan-diff.md` is Finalized. They MUST execute the resolved `plan.md`,
   not `plan.agent.md`.
 
 Rationale: A diff with only one possible verdict trains deference.
 
-Check: `prediction.md` filled before `/speckit-plan`; plan command does
-not read the prediction body; `plan-diff.md` Finalized with a verdict
-per delta; `plan.agent.md` original and `plan.md` resolved; tasks and
-implement refuse until that status.
+Check: `prediction.md` `## Sketch` filled before `/speckit-plan`; plan
+command does not read the prediction body; `plan-diff.md` Finalized with
+(a)(b)(c)(d) per delta and an action on (b)(c)(d); `plan.agent.md`
+original and `plan.md` resolved; tasks and implement refuse until that
+status.
 
 ### IV. Milestones, Then Audit for Drift
 
-Implement one milestone at a time. After implementation, audit the diff — not
-a summary of the diff.
+Implement one milestone at a time. The human signs off before the next one
+starts. After all milestones, audit the diff — not a summary of the diff.
 
-- Each milestone MUST have an observable pass/fail defined before that
-  milestone's work starts.
-- The agent MUST NOT start the next milestone while the current pass/fail is
-  unmet, unless the human names that skip (Principle I).
-- On a broken milestone the agent MUST surface the failure and work the cause
-  with the human. The agent MUST NOT apply a silent fix.
-- After implementation, a separate audit of the actual diff MUST answer:
+- Each milestone MUST have an observable pass/fail defined in `plan.md`
+  before that milestone's work starts.
+- `/speckit-implement` MUST do work for at most one unsigned milestone
+  in a single turn, then STOP and wait.
+- A milestone is unsigned until Dylan says it passed (sign-off) or names
+  a skip (Principle I). The agent's own check is not sign-off. "Looks
+  good" on the whole feature is not sign-off of later milestones.
+- The agent MUST NOT start the next milestone while the current one is
+  unsigned, even if tasks.md still has open rows, even if `/speckit-implement`
+  was invoked with "do all of it."
+- If he says "just build it" / "do all the milestones," the agent MUST
+  name the skipped sign-off gate for each remaining milestone before
+  continuing. A nameless skip is a violation.
+- Sign-off is recorded in `specs/<feature>/milestone-log.md`. Missing
+  file means every milestone is unsigned.
+- On a broken milestone the agent MUST surface the failure and work the
+  cause with the human. The agent MUST NOT apply a silent fix, and MUST
+  NOT proceed to the next milestone.
+- After all milestones are signed, a separate audit of the actual diff
+  MUST answer:
   (1) does it do what the spec said?
   (2) what did it do that the spec did not ask for?
   Question 2 MUST be answered with a named list of extras, or the word none.
@@ -138,9 +165,11 @@ a summary of the diff.
 - Gated work MUST NOT merge until the audit has run and the human has
   accepted it.
 
-Rationale: Question 2 is the one that finds problems; summaries hide extras.
+Rationale: Shipping every milestone in one turn trains him to review a
+blob. Sign-off is how a bad slice gets thrown away before the next slice.
 
-Check: plan (milestones with pass/fail); session (no silent fixes); diff
+Check: plan (milestones with pass/fail); implement (one unsigned
+milestone per turn; log updated; stop); session (no silent fixes); diff
 (audit answers 1 and 2 against the written spec before merge).
 
 ### V. Branch Per Gated Feature
@@ -302,13 +331,20 @@ agent MUST stop and surface the violation. The agent MUST NOT patch around it
 (rename the extra work, hide it in a "refactor," or claim an exception the
 human did not name).
 
+At implement time the agent MUST confirm:
+
+- only the next unsigned milestone from `plan.md` is in this turn (IV)
+- previous milestones are signed or a named skip exists in
+  `milestone-log.md` (IV)
+- stop after that milestone and wait for sign-off (IV)
+
 At plan time the agent MUST confirm:
 
 - written spec on the branch (II)
-- `prediction.md` exists with required sections filled before
-  `/speckit-plan`; the plan command MUST NOT read the prediction body (III)
-- `plan-diff.md` is Finalized with one of the three legal verdicts per
-  delta, not a blanket "looks good" (III)
+- `prediction.md` exists with `## Sketch` filled before `/speckit-plan`;
+  the plan command MUST NOT read the prediction body (III)
+- `plan-diff.md` is Finalized with (a)(b)(c)(d) per delta, and who we
+  go with on (b)(c)(d), not a blanket "looks good" (III)
 - no stack, schema, or scope violation (VIII, Settled Stack, Scope)
 
 At audit time the agent MUST confirm:
@@ -327,4 +363,4 @@ templates, agent habit, or "best practice":
 - TDD-before-implementation: no application code before a failing test,
   including while this repo has no test runner.
 
-**Version**: 1.0.1 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-21
+**Version**: 3.1.0 | **Ratified**: 2026-08-21 | **Last Amended**: 2026-08-22

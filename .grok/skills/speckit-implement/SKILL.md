@@ -92,6 +92,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 3. **Principle III gate**: `FEATURE_DIR/plan-diff.md` MUST exist and contain `Status: Finalized`. If missing or not finalized, STOP. Tell the user to run `/speckit-plan-diff`. Implement the resolved `plan.md` and `tasks.md`, not `plan.agent.md`.
 
+3b. **Principle IV gate (hard)**: Read `plan.md` **Milestones**. Read or create `FEATURE_DIR/milestone-log.md`. - If the log is missing, create it from the plan's milestone table with every row **unsigned**. - The next work is the first **unsigned** milestone. - If every milestone is signed, do not implement more code. Report that implement is done pending the Principle IV audit (spec vs extras). - If the user asks to do all remaining milestones in this turn: STOP unless they **name** the skipped sign-off for each one (constitution Principle I). A nameless "just build it" is a violation. - This turn MUST implement at most that one unsigned milestone, then STOP and wait for Dylan's sign-off. - Agent verification is not sign-off. Record awaiting-sign-off in the log. Wait. - On a later turn, if he signs that milestone (or names a skip), mark it in the log and only then take the next unsigned milestone — still one per turn.
+
 4. Load and analyze the implementation context:
     - **REQUIRED**: Read tasks.md for the complete task list and execution plan
     - **REQUIRED**: Read plan.md for tech stack, architecture, and file structure
@@ -151,34 +153,35 @@ You **MUST** consider the user input before proceeding (if not empty).
     - **Task details**: ID, description, file paths, parallel markers [P]
     - **Execution flow**: Order and dependency requirements
 
-7. Execute implementation following the task plan:
-    - **Phase-by-phase execution**: Complete each phase before moving to the next
-    - **Respect dependencies**: Run sequential tasks in order, parallel tasks [P] can run together
-    - **Follow TDD approach**: Execute test tasks before their corresponding implementation tasks
-    - **File-based coordination**: Tasks affecting the same files must run sequentially
-    - **Validation checkpoints**: Verify each phase completion before proceeding
+7. Execute **only the current unsigned milestone** (constitution Principle IV).
+   Map `tasks.md` rows to that milestone (use the milestone map in tasks.md
+   if present; otherwise map by plan.md Human review **Milestones** and
+   the files each task names).
+    - Do not start tasks that belong to a later milestone.
+    - Sequential tasks in order; [P] only inside this milestone.
+    - Same-file tasks sequential.
+    - Do not follow TDD-before-implementation unless constitution VII says
+      a test runner exists.
+    - On a broken milestone: surface it, work the cause with Dylan, do not
+      silent-fix, do not proceed.
 
-8. Implementation execution rules:
-    - **Setup first**: Initialize project structure, dependencies, configuration
-    - **Tests before code**: If you need to write tests for contracts, entities, and integration scenarios
-    - **Core development**: Implement models, services, CLI commands, endpoints
-    - **Integration work**: Database connections, middleware, logging, external services
-    - **Polish and validation**: Unit tests, performance optimization, documentation
+8. After that milestone's tasks:
+    - Mark those tasks `[X]` in tasks.md.
+    - Set the milestone to **awaiting-sign-off** in `milestone-log.md`.
+    - Show the milestone number, its **Pass if**, what changed, and how to
+      check it.
+    - **STOP.** Ask Dylan to sign off or name a skip. Do not start the next
+      milestone in this turn.
 
-9. Progress tracking and error handling:
-    - Report progress after each completed task
-    - Halt execution if any non-parallel task fails
-    - For parallel tasks [P], continue with successful tasks, report failed ones
-    - Provide clear error messages with context for debugging
-    - Suggest next steps if implementation cannot proceed
-    - **IMPORTANT** For completed tasks, make sure to mark the task off as [X] in the tasks file.
+9. Progress tracking:
+    - Report progress after each completed task in this milestone.
+    - Halt if a non-parallel task in this milestone fails.
+    - If tasks.md is missing or has no rows for the current milestone,
+      suggest `/speckit-tasks` — do not invent a different scope.
 
-10. Completion validation:
-
-- Verify all required tasks are completed
-- Check that implemented features match the original specification
-- Validate that tests pass and coverage meets requirements
-- Confirm the implementation follows the technical plan
+10. Do **not** treat "all tasks.md rows checked" as permission to skip
+    sign-off. Full-feature completion is: every plan.md milestone is
+    **signed** (or a named skip), then the Principle IV audit.
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/speckit-tasks` first to regenerate the task list.
 
@@ -220,11 +223,21 @@ Check if `.specify/extensions.yml` exists in the project root.
 
 ## Completion Report
 
-Report final status with summary of completed work.
+For a single `/speckit-implement` turn, report:
+
+- Which plan.md milestone was implemented
+- Tasks marked `[X]` for that milestone only
+- The **Pass if** check and how to verify it
+- That the next step is Dylan's sign-off (or a named skip), not the next milestone
+- Path to `milestone-log.md`
+
+When every milestone is signed, report that implement is complete and the
+next step is the Principle IV audit (spec vs extras), not more coding.
 
 ## Done When
 
-- [ ] All tasks in tasks.md completed and marked `[X]`
-- [ ] Implementation validated against specification, plan, and test coverage
+- [ ] This turn implemented at most one unsigned milestone
+- [ ] That milestone is awaiting sign-off (or signed/skipped in the log)
+- [ ] No later milestone was started in this turn
 - [ ] Extension hooks dispatched or skipped according to the rules in Mandatory Post-Execution Hooks above
-- [ ] Completion reported to user with summary of completed work
+- [ ] Dylan was asked to sign off before any further implement work

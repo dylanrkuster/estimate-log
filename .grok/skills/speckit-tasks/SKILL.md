@@ -58,6 +58,8 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 2. **Principle III gate**: `FEATURE_DIR/plan-diff.md` MUST exist and contain `**Status**: Finalized` (or `Status: Finalized`). If missing or not finalized, STOP. Tell the user to run `/speckit-plan-diff`. Do not generate tasks from an undiffed agent plan. Use the resolved `plan.md` (post-diff), not `plan.agent.md`.
 
+2b. **Principle IV**: Copy the **Milestones** table from resolved `plan.md` into `tasks.md` as a **Milestone map**: each plan milestone → task IDs that implement it. `/speckit-implement` stops after each of those milestones for sign-off. Do not emit one undifferentiated task list that can only be run to the end.
+
 3. **Load design documents**: Read from FEATURE_DIR:
     - **Required**: plan.md (tech stack, libraries, structure), spec.md (user stories with priorities)
     - **Optional**: data-model.md (entities), contracts/ (interface contracts), research.md (decisions), quickstart.md (test scenarios)
@@ -71,12 +73,14 @@ You **MUST** consider the user input before proceeding (if not empty).
     - If contracts/ exists: Map interface contracts to user stories
     - If research.md exists: Extract decisions for setup tasks
     - Generate tasks organized by user story (see Task Generation Rules below)
+    - Also group/map those tasks onto plan.md milestones (Principle IV)
     - Generate dependency graph showing user story completion order
     - Create parallel execution examples per user story
     - Validate task completeness (each user story has all needed tasks, independently testable)
 
 5. **Generate tasks.md**: Use TASKS_TEMPLATE_CONTENT (from the JSON output above) as the structure. For compatibility with older setup scripts that omit TASKS_TEMPLATE_CONTENT, read TASKS_TEMPLATE instead. Fill with:
     - Correct feature name from plan.md
+    - Milestone map (plan.md milestone → task IDs; each row is an implement sign-off gate)
     - Phase 1: Setup tasks (project initialization)
     - Phase 2: Foundational tasks (blocking prerequisites for all user stories)
     - Phase 3+: One phase per user story (in priority order from spec.md)
@@ -141,7 +145,7 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 ## Task Generation Rules
 
-**CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing.
+**CRITICAL**: Tasks MUST be organized by user story to enable independent implementation and testing. They MUST also map onto `plan.md` milestones so `/speckit-implement` can stop after each one (constitution IV).
 
 **Tests are OPTIONAL**: Only generate test tasks if explicitly requested in the feature specification or if user requests TDD approach.
 

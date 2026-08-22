@@ -6,6 +6,12 @@
 
 **Note**: This template is filled in by the `/speckit-plan` command; its definition describes the execution workflow.
 
+## Human review
+
+<!-- Filled last from the rest of this file. See .specify/templates/human-review-rules.md. Dylan reads this section only. -->
+
+_(unfilled)_
+
 ## Summary
 
 [Extract from feature spec: primary requirement + technical approach from research]
